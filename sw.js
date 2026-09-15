@@ -5,17 +5,17 @@ const ASSETS_TO_CACHE = [
   './index.html',
   './supabase_config.js',
   './manifest.json',
-  './assets/logo.png',
-  './assets/css/style.css',
-  './assets/js/app.js',
-  './assets/js/db.js',
-  './assets/js/login.js',
-  './assets/js/utils.js',
-  './assets/js/dashboard.js',
-  './assets/js/members.js',
-  './assets/js/organizations.js',
-  './assets/js/ministries.js',
-  './assets/js/pledges.js'
+  './logo.png',
+  './style.css',
+  './app.js',
+  './db.js',
+  './login.js',
+  './utils.js',
+  './dashboard.js',
+  './members.js',
+  './organizations.js',
+  './ministries.js',
+  './pledges.js'
 ];
 
 self.addEventListener('install', (event) => {

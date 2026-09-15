@@ -114,7 +114,7 @@ const memberTemplate = () => `
     <div id="id-card" style="background:#fff; margin: auto; width: 550px; max-width:95%; border-radius:15px; box-shadow:0 10px 30px rgba(0,0,0,0.2); overflow:hidden; position:relative; font-family:sans-serif;">
       <!-- Watermark Background -->
       <div style="position: absolute; top: 55%; left: 50%; transform: translate(-50%, -50%); opacity: 0.08; z-index: 0; pointer-events: none;">
-        <img src="assets/logo.png" style="width: 250px; height: auto;" />
+        <img src="logo.png" onerror="this.onerror=null;this.src='assets/logo.png';" style="width: 250px; height: auto;" />
       </div>
 
       <!-- Top Color Banner -->

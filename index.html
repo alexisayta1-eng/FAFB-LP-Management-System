@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>FAFB LP Church Management System</title>
-    <link rel="icon" type="image/png" href="assets/logo.png" />
+    <link rel="icon" type="image/png" href="logo.png" />
     <meta name="description" content="Comprehensive church management dashboard for the Filipino Assembly of the First Born (FAFB LP)." />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,15 +16,15 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="FAFB LP" />
-    <link rel="apple-touch-icon" href="assets/logo.png" />
-    <link rel="stylesheet" href="assets/css/style.css?v=12" />
+    <link rel="apple-touch-icon" href="logo.png" />
+    <link rel="stylesheet" href="style.css?v=13" />
 </head>
 <body>
     <!-- Login Screen -->
     <div id="login-container" class="login-wrapper">
         <div class="login-card">
             <div class="login-header">
-                <img src="assets/logo.png" alt="FAFB LP Logo" class="login-logo" />
+                <img src="logo.png" alt="FAFB LP Logo" class="login-logo" onerror="this.onerror=null;this.src='assets/logo.png';" />
                 <h2>FAFB Lower Panikian</h2>
                 <p>Sign in to access the Church Management System</p>
             </div>
@@ -53,7 +53,7 @@
     <div id="app-container" style="display: none;">
         <aside class="sidebar" id="sidebar">
         <div class="sidebar-brand">
-            <img src="assets/logo.png" alt="FAFB LP Logo" class="sidebar-logo" />
+            <img src="logo.png" alt="FAFB LP Logo" class="sidebar-logo" onerror="this.onerror=null;this.src='assets/logo.png';" />
             <div class="sidebar-brand-text">
                 <h1>FAFB LP</h1>
                 <span class="sidebar-subtitle">Church Management</span>
@@ -105,15 +105,15 @@
     <script src="supabase_config.js"></script>
     
     <!-- Application Scripts -->
-    <script src="assets/js/db.js?v=13"></script>
-    <script src="assets/js/login.js?v=13"></script>
-    <script src="assets/js/utils.js?v=13"></script>
-    <script src="assets/js/dashboard.js?v=13"></script>
-    <script src="assets/js/members.js?v=13"></script>
-    <script src="assets/js/organizations.js?v=13"></script>
-    <script src="assets/js/ministries.js?v=13"></script>
-    <script src="assets/js/pledges.js?v=13"></script>
-    <script src="assets/js/app.js?v=13"></script>
+    <script src="db.js?v=13"></script>
+    <script src="login.js?v=13"></script>
+    <script src="utils.js?v=13"></script>
+    <script src="dashboard.js?v=13"></script>
+    <script src="members.js?v=13"></script>
+    <script src="organizations.js?v=13"></script>
+    <script src="ministries.js?v=13"></script>
+    <script src="pledges.js?v=13"></script>
+    <script src="app.js?v=13"></script>
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {

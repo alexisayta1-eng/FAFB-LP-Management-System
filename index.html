@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FAFB LP Church Management System</title>
+    <link rel="icon" type="image/png" href="assets/logo.png" />
+    <meta name="description" content="Comprehensive church management dashboard for the Filipino Assembly of the First Born (FAFB LP)." />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#236c5d" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="FAFB LP" />
+    <link rel="apple-touch-icon" href="assets/logo.png" />
+    <link rel="stylesheet" href="assets/css/style.css?v=12" />
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="login-container" class="login-wrapper">
+        <div class="login-card">
+            <div class="login-header">
+                <img src="assets/logo.png" alt="FAFB LP Logo" class="login-logo" />
+                <h2>FAFB Lower Panikian</h2>
+                <p>Sign in to access the Church Management System</p>
+            </div>
+            <form id="login-form">
+                <div id="login-error" class="login-error" style="display: none;">Invalid credentials</div>
+                <label>Username
+                    <input type="text" id="login-username" placeholder="Enter your username" required />
+                </label>
+                <label>Password
+                    <div class="password-wrapper">
+                        <input type="password" id="login-password" placeholder="Enter your password" required />
+                        <button type="button" class="password-toggle" id="password-toggle" aria-label="Show password">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                        </button>
+                    </div>
+                </label>
+                <button type="submit" class="btn-primary login-btn">Login</button>
+                <div style="text-align: center; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(35, 108, 93, 0.15);">
+                    <button type="button" id="leader-view-btn" class="btn-secondary" style="width: 100%;">Continue as Leader (View Only)</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Application Container -->
+    <div id="app-container" style="display: none;">
+        <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <img src="assets/logo.png" alt="FAFB LP Logo" class="sidebar-logo" />
+            <div class="sidebar-brand-text">
+                <h1>FAFB LP</h1>
+                <span class="sidebar-subtitle">Church Management</span>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <button class="nav-btn active" data-view="dashboard">
+                <span class="nav-label">Dashboard</span>
+            </button>
+            <button class="nav-btn" data-view="members">
+                <span class="nav-label">Members</span>
+            </button>
+            <button class="nav-btn" data-view="organizations">
+                <span class="nav-label">Organizations</span>
+            </button>
+            <button class="nav-btn" data-view="ministries">
+                <span class="nav-label">Ministries</span>
+            </button>
+            <button class="nav-btn" data-view="pledges">
+                <span class="nav-label">Pledges</span>
+            </button>
+        </nav>
+        <div class="sidebar-footer">
+            <button id="logout-btn" class="nav-btn logout-btn">
+                <span class="nav-label">Logout</span>
+            </button>
+            <p>&copy; 2026 FAFB LP Community</p>
+        </div>
+    </aside>
+
+    <div class="main-wrapper">
+        <header class="top-bar">
+            <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle sidebar">
+                <span></span><span></span><span></span>
+            </button>
+            <div class="top-bar-title" id="top-bar-title">Dashboard</div>
+        </header>
+        <main id="app-root" class="app-main">
+            <!-- Dynamic content injected by app.js -->
+        </main>
+    </div>
+
+    <!-- Overlay for mobile sidebar -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+    </div> <!-- End app-container -->
+
+    <!-- Supabase Client & Config -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase_config.js"></script>
+    
+    <!-- Application Scripts -->
+    <script src="assets/js/db.js?v=13"></script>
+    <script src="assets/js/login.js?v=13"></script>
+    <script src="assets/js/utils.js?v=13"></script>
+    <script src="assets/js/dashboard.js?v=13"></script>
+    <script src="assets/js/members.js?v=13"></script>
+    <script src="assets/js/organizations.js?v=13"></script>
+    <script src="assets/js/ministries.js?v=13"></script>
+    <script src="assets/js/pledges.js?v=13"></script>
+    <script src="assets/js/app.js?v=13"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then((reg) => console.log('PWA Service Worker registered:', reg.scope))
+                    .catch((err) => console.warn('PWA Service Worker registration failed:', err));
+            });
+        }
+    </script>
+</body>
+</html>

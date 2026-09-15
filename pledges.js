@@ -137,12 +137,12 @@ window.renderPledgesView = async function(container) {
           const tr = document.createElement('tr');
           const statusLower = (p.status || 'pending').toLowerCase();
           tr.innerHTML = `
-            <td><strong>${p.family || '-'}</strong></td>
-            <td>₱${pAmount.toLocaleString('en-PH', {minimumFractionDigits:2, maximumFractionDigits:2})}</td>
+            <td><strong style="font-size: 1.05rem; color: var(--text-primary);">👥 ${p.family || '-'}</strong></td>
+            <td><strong style="font-size: 1rem; color: var(--primary);">₱${pAmount.toLocaleString('en-PH', {minimumFractionDigits:2, maximumFractionDigits:2})}</strong></td>
             <td><span class="badge badge-${statusLower}">${p.status || 'Pending'}</span></td>
             <td>
-              ${!window.isViewOnly() && p.status === 'Pending' ? `<button class="mark-paid-btn" data-id="${p.id}">Mark Paid</button>` : ''}
-              ${!window.isViewOnly() && p.status === 'Paid' ? `<button class="mark-pending-btn btn-secondary" data-id="${p.id}">Undo</button>` : ''}
+              ${!window.isViewOnly() && p.status === 'Pending' ? `<button class="mark-paid-btn btn-primary" data-id="${p.id}" style="padding: 6px 12px; font-size: 0.88rem;">Mark Paid</button>` : ''}
+              ${!window.isViewOnly() && p.status === 'Paid' ? `<button class="mark-pending-btn btn-secondary" data-id="${p.id}" style="padding: 6px 12px; font-size: 0.88rem;">Undo</button>` : ''}
             </td>
           `;
           tbody.appendChild(tr);
@@ -216,7 +216,7 @@ async function renderThanksgivingTab(container, members) {
         <table class="data-table" id="thanksgiving-table">
           <thead>
             <tr>
-              <th>Pledger</th>
+              <th>Family / Pledger</th>
               <th>Date of Thanksgiving</th>
               <th>Pledge Amount</th>
               <th>Advance Payment / Paid</th>
@@ -478,23 +478,23 @@ async function renderThanksgivingTab(container, members) {
 
       const tr = document.createElement('tr');
       tr.innerHTML = `
-        <td><strong>${pledgerName}</strong></td>
-        <td>${window.formatDate(p.thanksgivingDate || p.datePledged)}</td>
-        <td><strong>₱${totalAmount.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong></td>
-        <td style="color: var(--primary); font-weight: 600;">₱${paidAmount.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+        <td><strong style="font-size: 1.05rem; color: var(--text-primary);">👥 ${pledgerName}</strong></td>
+        <td style="font-size: 0.95rem;">${window.formatDate(p.thanksgivingDate || p.datePledged)}</td>
+        <td><strong style="font-size: 1rem; color: var(--text-primary);">₱${totalAmount.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong></td>
+        <td style="color: var(--primary); font-weight: 700; font-size: 1rem;">₱${paidAmount.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
         <td>
           ${balance > 0 
-            ? `<strong style="color: #e67e22;">₱${balance.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong>` 
-            : `<span style="color: var(--success); font-weight: 600;">₱0.00</span>`
+            ? `<strong style="color: #e67e22; font-size: 1rem;">₱${balance.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong>` 
+            : `<span style="color: var(--success); font-weight: 700; font-size: 1rem;">₱0.00</span>`
           }
         </td>
         <td><span class="badge ${statusBadgeClass}">${status}</span></td>
-        <td class="text-sm">${p.notes || '-'}</td>
+        <td class="text-sm" style="font-size: 0.9rem;">${p.notes || '-'}</td>
         <td style="white-space: nowrap;">
-          ${!window.isViewOnly() && balance > 0 ? `<button class="cash-advance-btn btn-primary" data-id="${p.id}" style="padding: 4px 8px; font-size: 0.8rem; margin-right: 4px;">+ Advance Payment</button>` : ''}
-          ${!window.isViewOnly() && balance > 0 ? `<button class="pay-full-btn btn-secondary" data-id="${p.id}" style="padding: 4px 8px; font-size: 0.8rem; margin-right: 4px;">Pay Full</button>` : ''}
-          ${!window.isViewOnly() && paidAmount > 0 ? `<button class="reset-paid-btn btn-secondary" data-id="${p.id}" data-family="${pledgerName}" style="padding: 4px 8px; font-size: 0.8rem; margin-right: 4px;" title="Reset payments to 0">Reset</button>` : ''}
-          ${!window.isViewOnly() ? `<button class="edit-thanksgiving-btn btn-edit-text" data-id="${p.id}" style="margin-left: 4px;">✏ Edit</button><button class="delete-pledge-btn btn-danger-text" data-id="${p.id}" style="margin-left: 4px;">&times; Delete</button>` : '<span class="text-muted">View Only</span>'}
+          ${!window.isViewOnly() && balance > 0 ? `<button class="cash-advance-btn btn-primary" data-id="${p.id}" style="padding: 6px 12px; font-size: 0.85rem; margin-right: 4px;">+ Advance Payment</button>` : ''}
+          ${!window.isViewOnly() && balance > 0 ? `<button class="pay-full-btn btn-secondary" data-id="${p.id}" style="padding: 6px 12px; font-size: 0.85rem; margin-right: 4px;">Pay Full</button>` : ''}
+          ${!window.isViewOnly() && paidAmount > 0 ? `<button class="reset-paid-btn btn-secondary" data-id="${p.id}" data-family="${pledgerName}" style="padding: 6px 12px; font-size: 0.85rem; margin-right: 4px;" title="Reset payments to 0">Reset</button>` : ''}
+          ${!window.isViewOnly() ? `<button class="edit-thanksgiving-btn btn-edit-text" data-id="${p.id}" style="margin-left: 4px; font-size: 0.88rem;">✏ Edit</button><button class="delete-pledge-btn btn-danger-text" data-id="${p.id}" style="margin-left: 4px; font-size: 0.88rem;">&times; Delete</button>` : '<span class="text-muted">View Only</span>'}
         </td>
       `;
       tbody.appendChild(tr);
@@ -913,22 +913,22 @@ async function renderHospitalizationTab(container, members) {
         const pledgeStatusLower = (p.pledgeStatus || 'none').toLowerCase();
         tr.innerHTML = `
           <td>
-            <strong>${member ? member.name : 'Unknown Member'}</strong><br>
-            <span class="text-muted">🏥 ${p.hospitalName || 'Hospital'}</span>
+            <strong style="font-size: 1.05rem; color: var(--text-primary);">${member ? member.name : 'Unknown Member'}</strong><br>
+            <span class="text-muted" style="font-size: 0.9rem;">🏥 ${p.hospitalName || 'Hospital'} ${member && member.family ? `&bull; 👥 Family: <strong>${member.family}</strong>` : ''}</span>
           </td>
-          <td>
+          <td style="font-size: 0.95rem;">
             ${window.formatDate(p.admissionDate)} ${p.dischargeDate ? `<br><small class="text-muted">Disch: ${window.formatDate(p.dischargeDate)}</small>` : ''}<br>
             <span class="badge badge-${statusLower}">${p.status || 'Admitted'}</span>
           </td>
           <td>
-            <strong>₱${(parseFloat(p.pledgeAmount) || 0).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong><br>
+            <strong style="font-size: 1.05rem; color: var(--text-primary);">₱${(parseFloat(p.pledgeAmount) || 0).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong><br>
             <span class="badge badge-${pledgeStatusLower}">${p.pledgeStatus || 'None'}</span>
           </td>
           <td style="white-space: nowrap;">
-            <button class="view-payments-btn btn-secondary" data-id="${p.id}" data-title="Hospitalization of ${member ? member.name : 'Unknown'}">View Payments</button>
-            ${!window.isViewOnly() && p.status === 'Admitted' ? `<button class="discharge-btn" data-id="${p.id}" style="margin-left:5px;">Discharge</button>` : ''}
-            ${!window.isViewOnly() && p.pledgeStatus === 'Pledged' && (parseFloat(p.pledgeAmount) || 0) > 0 ? `<button class="disburse-btn" data-id="${p.id}" style="margin-left:5px;">Disburse</button>` : ''}
-            ${!window.isViewOnly() ? `<button class="edit-hosp-btn btn-edit-text" data-id="${p.id}" style="margin-left:5px;">✏ Edit</button><button class="delete-hosp-btn btn-danger-text" data-id="${p.id}" style="margin-left:5px;">&times; Delete</button>` : '<span class="text-muted">View Only</span>'}
+            <button class="view-payments-btn btn-secondary" data-id="${p.id}" data-title="Hospitalization of ${member ? member.name : 'Unknown'}" style="padding: 6px 12px; font-size: 0.88rem;">👥 View Family Payments</button>
+            ${!window.isViewOnly() && p.status === 'Admitted' ? `<button class="discharge-btn btn-primary" data-id="${p.id}" style="margin-left:5px; padding: 6px 12px; font-size: 0.88rem;">Discharge</button>` : ''}
+            ${!window.isViewOnly() && p.pledgeStatus === 'Pledged' && (parseFloat(p.pledgeAmount) || 0) > 0 ? `<button class="disburse-btn btn-primary" data-id="${p.id}" style="margin-left:5px; padding: 6px 12px; font-size: 0.88rem;">Disburse</button>` : ''}
+            ${!window.isViewOnly() ? `<button class="edit-hosp-btn btn-edit-text" data-id="${p.id}" style="margin-left:5px; font-size: 0.88rem;">✏ Edit</button><button class="delete-hosp-btn btn-danger-text" data-id="${p.id}" style="margin-left:5px; font-size: 0.88rem;">&times; Delete</button>` : '<span class="text-muted">View Only</span>'}
           </td>
         `;
         tbody.appendChild(tr);
@@ -1256,13 +1256,13 @@ async function renderWeddingTab(container, members) {
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td>
-            <strong>${p.groomName || 'Groom'} & ${p.brideName || 'Bride'}</strong><br>
-            <span class="text-muted"><small>💍 ${window.formatDate(p.weddingDate)}</small></span>
+            <strong style="font-size: 1.05rem; color: var(--text-primary);">💍 ${p.groomName || 'Groom'} & ${p.brideName || 'Bride'}</strong><br>
+            <span class="text-muted" style="font-size: 0.9rem;">📅 ${window.formatDate(p.weddingDate)}</span>
           </td>
-          <td><strong>₱${(parseFloat(p.amount) || 0).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong></td>
+          <td><strong style="font-size: 1.05rem; color: var(--primary);">₱${(parseFloat(p.amount) || 0).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong></td>
           <td style="white-space: nowrap;">
-            <button class="view-payments-btn btn-secondary" data-id="${p.id}" data-title="${p.groomName} & ${p.brideName}">View Payments</button>
-            ${!window.isViewOnly() ? `<button class="edit-wedding-btn btn-edit-text" data-id="${p.id}" style="margin-left:5px;">✏ Edit</button><button class="delete-wedding-btn btn-danger-text" data-id="${p.id}" style="margin-left:5px;">&times; Delete</button>` : '<span class="text-muted">View Only</span>'}
+            <button class="view-payments-btn btn-secondary" data-id="${p.id}" data-title="${p.groomName} & ${p.brideName}" style="padding: 6px 12px; font-size: 0.88rem;">👥 View Family Payments</button>
+            ${!window.isViewOnly() ? `<button class="edit-wedding-btn btn-edit-text" data-id="${p.id}" style="margin-left:5px; font-size: 0.88rem;">✏ Edit</button><button class="delete-wedding-btn btn-danger-text" data-id="${p.id}" style="margin-left:5px; font-size: 0.88rem;">&times; Delete</button>` : '<span class="text-muted">View Only</span>'}
           </td>
         `;
         tbody.appendChild(tr);

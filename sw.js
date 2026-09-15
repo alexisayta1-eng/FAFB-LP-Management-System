@@ -1,5 +1,5 @@
 // Service Worker for FAFB LP Church Management System
-const CACHE_NAME = 'fafb-pwa-cache-v13';
+const CACHE_NAME = 'fafb-pwa-cache-v14';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',

@@ -184,11 +184,66 @@ window.renderMembersView = async function(container, orgFilterId = null) {
   
   const profileInput = form.querySelector('#member-profile-image');
   const profilePreview = form.querySelector('#profile-preview');
+  let currentProcessedImageBase64 = null;
+
+  // Process, convert (including iPhone HEIC/HEIF), and compress image to universal JPEG
+  async function processProfileImage(file) {
+    if (!file) return null;
+    
+    let blobToProcess = file;
+    const isHeic = file.type === 'image/heic' || file.type === 'image/heif' || 
+                   (file.name && (file.name.toLowerCase().endsWith('.heic') || file.name.toLowerCase().endsWith('.heif')));
+    
+    if (isHeic && typeof window.heic2any === 'function') {
+      try {
+        const converted = await window.heic2any({ blob: file, toType: 'image/jpeg', quality: 0.85 });
+        blobToProcess = Array.isArray(converted) ? converted[0] : converted;
+      } catch (err) {
+        console.warn('heic2any conversion notice:', err);
+      }
+    }
+
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          const maxDim = 320;
+          let width = img.width;
+          let height = img.height;
+          if (width > height) {
+            if (width > maxDim) {
+              height = Math.round((height * maxDim) / width);
+              width = maxDim;
+            }
+          } else {
+            if (height > maxDim) {
+              width = Math.round((width * maxDim) / height);
+              height = maxDim;
+            }
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          resolve(canvas.toDataURL('image/jpeg', 0.85));
+        };
+        img.onerror = () => {
+          resolve(e.target.result);
+        };
+        img.src = e.target.result;
+      };
+      reader.onerror = () => resolve(null);
+      reader.readAsDataURL(blobToProcess);
+    });
+  }
 
   function openModal(isEdit = false) {
     if (!isEdit) {
       form.reset();
       form.querySelector('#member-id').value = '';
+      currentProcessedImageBase64 = null;
       profileInput.value = '';
       profilePreview.src = '';
       profilePreview.style.display = 'none';
@@ -202,6 +257,7 @@ window.renderMembersView = async function(container, orgFilterId = null) {
     modal.style.display = 'none';
     form.reset();
     form.querySelector('#member-id').value = '';
+    currentProcessedImageBase64 = null;
     profilePreview.src = '';
     profilePreview.style.display = 'none';
   }
@@ -213,15 +269,22 @@ window.renderMembersView = async function(container, orgFilterId = null) {
     if (e.target === modal) closeModal();
   });
 
-  profileInput.addEventListener('change', () => {
+  profileInput.addEventListener('change', async () => {
     if (profileInput.files && profileInput.files[0]) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        profilePreview.src = e.target.result;
-        profilePreview.style.display = 'block';
-      };
-      reader.readAsDataURL(profileInput.files[0]);
+      profilePreview.style.display = 'block';
+      profilePreview.style.opacity = '0.5';
+      const file = profileInput.files[0];
+      try {
+        currentProcessedImageBase64 = await processProfileImage(file);
+        if (currentProcessedImageBase64) {
+          profilePreview.src = currentProcessedImageBase64;
+          profilePreview.style.opacity = '1';
+        }
+      } catch (err) {
+        console.error('Error processing profile image:', err);
+      }
     } else {
+      currentProcessedImageBase64 = null;
       profilePreview.src = '';
       profilePreview.style.display = 'none';
     }
@@ -349,7 +412,7 @@ window.renderMembersView = async function(container, orgFilterId = null) {
       tr.innerHTML = `
         <td>
           <div style="display: flex; align-items: center; gap: 10px;">
-            ${m.profileImage ? `<img src="${m.profileImage}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 1px solid #ddd;" />` : `<div style="width: 40px; height: 40px; border-radius: 50%; background: #eee; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: #999;">👤</div>`}
+            ${m.profileImage ? `<img src="${m.profileImage}" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='flex';" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 1.5px solid var(--primary, #31a38c);" /><div style="width: 40px; height: 40px; border-radius: 50%; background: #eee; display: none; align-items: center; justify-content: center; font-size: 1.2rem; color: #999;">👤</div>` : `<div style="width: 40px; height: 40px; border-radius: 50%; background: #eee; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: #999;">👤</div>`}
             <strong>${m.name}</strong>
           </div>
         </td>
@@ -434,11 +497,7 @@ window.renderMembersView = async function(container, orgFilterId = null) {
       let profileImageBase64 = null;
       if (profileInput.files && profileInput.files[0]) {
         const file = profileInput.files[0];
-        profileImageBase64 = await new Promise((resolve) => {
-          const reader = new FileReader();
-          reader.onloadend = () => resolve(reader.result);
-          reader.readAsDataURL(file);
-        });
+        profileImageBase64 = currentProcessedImageBase64 || (await processProfileImage(file));
       }
       
       let member;
@@ -463,7 +522,7 @@ window.renderMembersView = async function(container, orgFilterId = null) {
           contact: data.get('contact'),
           address: data.get('address'),
           organizationId: data.get('organizationId') || null,
-          profileImage: profileImageBase64,
+          profileImage: profileImageBase64 || null,
         };
       }
       
@@ -507,6 +566,9 @@ window.renderMembersView = async function(container, orgFilterId = null) {
         
         const photoEl = container.querySelector('#id-photo');
         if (photoEl) {
+          photoEl.onerror = () => {
+            photoEl.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23eee"/><text x="50" y="65" font-size="40" text-anchor="middle" fill="%23999">👤</text></svg>';
+          };
           if (member.profileImage) {
             photoEl.src = member.profileImage;
           } else {
